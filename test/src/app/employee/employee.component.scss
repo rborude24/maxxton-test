@@ -8,22 +8,25 @@ table {
   width: 25%;
 }
 
-// td, th {
-//   // width: 25%;
-// }
-
 th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
-  padding: 0;
   border-bottom-width: 1px;
   border-bottom-style: solid;
   width: 300px;
   text-align: left !important;
-  // background-color: aquamarine;
+}
+
+tr.mat-row, tr.mat-footer-row {
+  height: 43px;
+  vertical-align: middle;
+}
+
+tr.mat-header-row {
+  height: 45px;
+  vertical-align: middle;
 }
 
 th.mat-header-cell{
   background-color: rgb(201, 200, 200);
   font-size: medium;
   font-weight: 500;
-  padding-top: 20px;
 }
