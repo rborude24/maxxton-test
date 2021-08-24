@@ -1,76 +1,92 @@
-<!-- <p>employee works!</p> -->
-
 <div>
-<mat-form-field appearance="standard">
-  <mat-label>Filter</mat-label>
-  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Ash" #input>
-</mat-form-field>
-<mat-checkbox style="margin-left: 25px;" (change)="findExperiencedCandidates($event.checked)">2+ yrs. Experience</mat-checkbox>
-<mat-checkbox style="margin-left: 25px;" (change)="deleteCandidates($event.checked)">Delete Candidates from Development Department</mat-checkbox>
-<mat-checkbox style="margin-left: 25px;" (change)="getDepartmentDetails($event.checked)">Get Department wise Details</mat-checkbox>
+  <mat-form-field appearance="standard">
+    <mat-label>Filter</mat-label>
+    <input
+      matInput
+      (keyup)="applyFilter($event)"
+      placeholder="Ex. Ash"
+      #input
+    />
+  </mat-form-field>
+  <mat-checkbox
+    style="margin-left: 25px;cursor: pointer;" [(ngModel)]= "experiencedChecked"
+    (change)="findExperiencedCandidates($event.checked)"
+    >2+ yrs. Experience</mat-checkbox
+  >
+  <mat-checkbox
+    style="margin-left: 25px;cursor: pointer;"
+    (change)="deleteCandidates($event.checked)" [(ngModel)]="deleteChecked"
+    >Delete Candidates from Development Department</mat-checkbox
+  >
+  <mat-checkbox
+    style="margin-left: 25px;cursor: pointer;"
+    (change)="getDepartmentDetails($event.checked)" [(ngModel)]="departmentChecked"
+    >Get Department wise Details</mat-checkbox
+  >
+  <button style="background-color: cadetblue;border-radius: 4px;margin-left: 25px;cursor: pointer;" mat-button (click)="reset()">Reset</button>
 </div>
 
 
-<div *ngIf="employeeVisibility"  style="max-height: 300px;overflow-y: auto;margin-top: 16px;"class="mat-elevation-z8">
-  <mat-table style="width: 100%;" [dataSource]="dataSource" matSort>
-
-    <!-- ID Column -->
+<div
+  *ngIf="employeeVisibility"
+  style="max-height: 300px; overflow-y: auto; margin-top: 16px"
+  class="mat-elevation-z8"
+>
+<!-- This table is to Display Employee Data -->
+  <mat-table style="width: 100%" [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-      <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
     </ng-container>
 
-    <!-- Progress Column -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-      <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let row">{{ row.name }}</td>
     </ng-container>
 
-    <!-- Name Column -->
     <ng-container matColumnDef="department">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Department </th>
-      <td mat-cell *matCellDef="let row"> {{row.department}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Department</th>
+      <td mat-cell *matCellDef="let row">{{ row.department }}</td>
     </ng-container>
 
-    <!-- Fruit Column -->
     <ng-container matColumnDef="joining_date">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Joining Date </th>
-      <td mat-cell *matCellDef="let row"> {{row.joining_date |date: 'dd/MM/yyyy'}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Joining Date</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.joining_date | date: "dd/MM/yyyy" }}
+      </td>
     </ng-container>
 
-    <tr mat-header-row  *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr mat-row  *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
     <!-- Row shown when there is no matching data. -->
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      <td class="mat-cell" colspan="4">
+        No data matching the filter "{{ input.value }}"
+      </td>
     </tr>
-    </mat-table>
-
+  </mat-table>
 </div>
 
-<div *ngIf="!employeeVisibility" style="max-height: 300px;overflow-y: auto;"class="mat-elevation-z8">
-  <mat-table style="width: 100%;" [dataSource]="DepartmentData" matSort>
 
-    <!-- ID Column -->
+<!-- This table is to Display Department Data -->
+<div
+  *ngIf="!employeeVisibility"
+  style="max-height: 300px; overflow-y: auto"
+  class="mat-elevation-z8"
+>
+  <mat-table style="width: 100%" [dataSource]="DepartmentData">
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-      <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+      <th mat-header-cell *matHeaderCellDef >Name</th>
+      <td mat-cell *matCellDef="let row">{{ row.name }}</td>
     </ng-container>
 
-    <!-- Progress Column -->
     <ng-container matColumnDef="count">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Count </th>
-      <td mat-cell *matCellDef="let row"> {{row.count}} </td>
+      <th mat-header-cell *matHeaderCellDef >Count</th>
+      <td mat-cell *matCellDef="let row">{{ row.count }}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="departmentColumns; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: departmentColumns;"></tr>
-
-    <!-- Row shown when there is no matching data. -->
-    <!-- <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-    </tr> -->
-    </mat-table>
-
+    <tr mat-row *matRowDef="let row; columns: departmentColumns"></tr>
+  </mat-table>
 </div>
